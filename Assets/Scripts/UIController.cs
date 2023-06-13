@@ -13,7 +13,7 @@ public class UIController : MonoBehaviour
     public Button startButton;
     public Button informationButton;
     public Image informationUI;
-    private float infoButtonStartPos = -800;
+    private float infoButtonStartPos = -2000;
     private float infoButtonEndPos = 0;
 
 
