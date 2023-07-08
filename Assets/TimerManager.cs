@@ -106,8 +106,8 @@ public class TimerManager : MonoBehaviour
 
     public void StartSecondFighterTimer()
     {
-        secondFighterTimerText.enabled = true;
-        secondFightTimer = stateManager.roundTime + stateManager.secondRoundBufferTime;
+        //secondFighterTimerText.enabled = true;
+        secondFightTimer = stateManager.secondRoundBufferTime;
 
     }
 
