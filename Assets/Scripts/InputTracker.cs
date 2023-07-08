@@ -189,7 +189,7 @@ public class InputTracker : MonoBehaviour
         trackInputs = true;
     }
 
-    private void EndTracking()
+    public void EndTracking()
     {
         trackInputs = false;
         hitInputs[inputIterator] = -1;
@@ -289,10 +289,6 @@ public class InputTracker : MonoBehaviour
 
         //increase time
         inputTrackingTimer += Time.deltaTime;
-
-        //if time reached then stop tracking
-        if (inputTrackingTimer >= inputTrackingTime)
-            EndTracking();
     }
 
     private void PrintHitInputArray()

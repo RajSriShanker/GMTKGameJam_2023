@@ -43,7 +43,8 @@ public class TimerManager : MonoBehaviour
         if (preFightTimer > 0)
         {
             preFightTimer -= Time.deltaTime;
-            preFightTimerText.text = "" + Mathf.Ceil(preFightTimer);
+            float displayTime = (preFightTimer / stateManager.preFightTime) * 3;
+            preFightTimerText.text = "" + Mathf.Ceil(displayTime);
 
             if (preFightTimer < 0)
             {
@@ -92,7 +93,7 @@ public class TimerManager : MonoBehaviour
     public void StartPreFightTimer()
     {
         preFightTimerText.enabled = true;
-        preFightTimer = 3f;
+        preFightTimer = stateManager.preFightTime;
 
     }
 
