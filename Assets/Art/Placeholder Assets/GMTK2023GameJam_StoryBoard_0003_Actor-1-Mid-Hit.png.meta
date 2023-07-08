@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 397b0778b9317f14b91064def434901d
+guid: 66bbf0d969934334392f44b391b90a6d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -147,70 +147,7 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites:
-    - serializedVersion: 2
-      name: GMTK2023GameJam_StoryBoard_0001_arrows_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1
-        width: 107
-        height: 144
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e3339803a41df6b46880e77c4afdfbcf
-      internalID: -2146524394
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GMTK2023GameJam_StoryBoard_0001_arrows_1
-      rect:
-        serializedVersion: 2
-        x: 164
-        y: 0
-        width: 117
-        height: 132
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 523af909f3daa324e8ba4efa76d00f45
-      internalID: -176053809
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: GMTK2023GameJam_StoryBoard_0001_arrows_2
-      rect:
-        serializedVersion: 2
-        x: 338
-        y: 29
-        width: 163
-        height: 91
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f019fbc38ee9aff49adf5d2b22918caf
-      internalID: 604271852
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
+    sprites: []
     outline: []
     physicsShape: []
     bones: []
@@ -221,10 +158,7 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable:
-      GMTK2023GameJam_StoryBoard_0001_arrows_0: -2146524394
-      GMTK2023GameJam_StoryBoard_0001_arrows_1: -176053809
-      GMTK2023GameJam_StoryBoard_0001_arrows_2: 604271852
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
