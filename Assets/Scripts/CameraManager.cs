@@ -13,7 +13,7 @@ public class CameraManager : MonoBehaviour
         MoveCam(1);
     }
 
-    private void MoveCam(int side)
+    public void MoveCam(int side)
     {
         if (side == 1)
             camTransform.position = initialCamPos;
