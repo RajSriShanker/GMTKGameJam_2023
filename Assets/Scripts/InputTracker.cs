@@ -131,6 +131,7 @@ public class InputTracker : MonoBehaviour
     private ComboInt[] validComboIntList;
     [SerializeField] private ComboAttacks[] comboAttacks;
     [SerializeField] private ComboAttacksInt[] comboAttacksInt;
+    [SerializeField] private IndicatorManager indicatorManager;
 
 
     private void Awake()
@@ -148,7 +149,7 @@ public class InputTracker : MonoBehaviour
         validComboIntList = new ComboInt[30];
         comboAttacksInt = new ComboAttacksInt[30];
         CreateComboTable();
-        combosToPlay = new int[20];
+        combosToPlay = new int[50];
 
     }
 
@@ -579,6 +580,7 @@ public class InputTracker : MonoBehaviour
         Debug.Log("Combo " + comboNum + "  has been performed");
         combosToPlay[maxComboToPlay] = comboNum;
         maxComboToPlay += 1;
+        indicatorManager.ShowCombo();
         AddScore(25); //TEMP
     }
     private void PrintHitInputArray()
