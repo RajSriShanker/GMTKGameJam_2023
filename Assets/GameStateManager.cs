@@ -20,8 +20,11 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private CameraManager camManager;
     [SerializeField] private InputTracker inputTracker;
     public float roundTime;
+    public float preFightTime;
+    [SerializeField] private float timeDecreasePerRoundPercent;
     public float secondRoundBufferTime;
     [SerializeField] private HitReceiverManager recieverManager;
+    
 
     private void Awake()
     {
@@ -110,6 +113,7 @@ public class GameStateManager : MonoBehaviour
 
         if (timerManager.firstFighterTimerDone)
         {
+            inputTracker.EndTracking();
             firstFighterStateRun = false;
             timerManager.firstFighterTimerDone = false;
             return 4;
@@ -150,6 +154,7 @@ public class GameStateManager : MonoBehaviour
 
         if (timerManager.secondFighterTimerDone)
         {
+            roundTime -= (roundTime * timeDecreasePerRoundPercent);
             recieverManager.EndTracking();
             secondFighterStateRun = false;
             timerManager.secondFighterTimerDone = false;

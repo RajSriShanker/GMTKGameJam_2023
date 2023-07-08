@@ -843,6 +843,8 @@ MonoBehaviour:
   camManager: {fileID: 1155841243}
   inputTracker: {fileID: 195520306}
   roundTime: 5
+  preFightTime: 1
+  timeDecreasePerRoundPercent: 0.1
   secondRoundBufferTime: 2
   recieverManager: {fileID: 1037236787}
 --- !u!1 &278039940
