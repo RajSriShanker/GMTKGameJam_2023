@@ -149,9 +149,13 @@ public class HitReceiverManager : MonoBehaviour
     {
         if (redHitDetected)
         {
-            if (redTarget.currentlySelectedHit != null)
+            if (blueTarget.currentlySelectedHit != null)
             {
-                Destroy(redTarget.currentlySelectedHit);
+                Destroy(blueTarget.currentlySelectedHit);
+            }
+            if (greenTarget.currentlySelectedHit != null)
+            {
+                Destroy(greenTarget.currentlySelectedHit);
             }
             redHitDetected = false;
         }
@@ -159,9 +163,13 @@ public class HitReceiverManager : MonoBehaviour
 
         if (blueHitDetected)
         {
-            if (blueTarget.currentlySelectedHit != null)
+            if (redTarget.currentlySelectedHit != null)
             {
-                Destroy(blueTarget.currentlySelectedHit);
+                Destroy(redTarget.currentlySelectedHit);
+            }
+            if (greenTarget.currentlySelectedHit != null)
+            {
+                Destroy(greenTarget.currentlySelectedHit);
             }
             blueHitDetected = false;
         }
@@ -169,9 +177,13 @@ public class HitReceiverManager : MonoBehaviour
 
         if (greenHitDetected)
         {
-            if (greenTarget.currentlySelectedHit != null)
+            if (blueTarget.currentlySelectedHit != null)
             {
-                Destroy(greenTarget.currentlySelectedHit);
+                Destroy(blueTarget.currentlySelectedHit);
+            }
+            if (redTarget.currentlySelectedHit != null)
+            {
+                Destroy(redTarget.currentlySelectedHit);
             }
             greenHitDetected = false;
         }
