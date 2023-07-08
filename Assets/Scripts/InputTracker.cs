@@ -362,27 +362,11 @@ public class InputTracker : MonoBehaviour
 
     }
 
-    private void AddScore(int inputColor, float timeInputted)
+    private void AddScore(int scoreToAdd)
     {
-        float timeBonus = 1;
-        float noteChangeBonus = 1;
-
-        if (inputColor != lastInput)
-        {
-            noteChangeBonus = noteSwitchMultiplier;
-        }
-
-        timeBonus = timeBetweenHitMultiplier / (timeInputted - lastInputTime);
-
-        float scoreToAdd = baseNoteScore + (baseNoteScore * timeBonus) + (noteChangeBonus * baseNoteScore);
 
         Debug.Log("adding score");
-        crowdSlider.value = crowdSlider.value +  scoreToAdd;
-        
-        secondToLastInput = lastInput;
-        secondToLastInputTime = lastInputTime;
-        lastInput = inputColor;
-        lastInputTime = timeInputted;
+        crowdSlider.value = crowdSlider.value +  scoreToAdd;;
     
     }
 
@@ -595,6 +579,7 @@ public class InputTracker : MonoBehaviour
         Debug.Log("Combo " + comboNum + "  has been performed");
         combosToPlay[maxComboToPlay] = comboNum;
         maxComboToPlay += 1;
+        AddScore(25); //TEMP
     }
     private void PrintHitInputArray()
     {
