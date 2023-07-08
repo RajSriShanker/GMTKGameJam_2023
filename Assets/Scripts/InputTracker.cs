@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using DG.Tweening;
+using UnityEngine.UI;
 
 public class InputTracker : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class InputTracker : MonoBehaviour
     [SerializeField] private InputActionReference purpleAction;
 
     private bool trackInputs;
-    [SerializeField] private float inputTrackingTime;
+    private float inputTrackingTime;
     private float inputTrackingTimer;
     // 0 = no hit, 1 =red, 2 = blue, 3 = green 
     private int[] hitInputs = new int[2000];
@@ -44,6 +45,19 @@ public class InputTracker : MonoBehaviour
     private float greenColorTimer;
     private float blueColorTimer;
     [SerializeField] private float colorChangeTime;
+    [SerializeField] private GameStateManager stateManager;
+
+    private int lastInput;
+    private float lastInputTime;
+    private int secondToLastInput;
+    private float secondToLastInputTime;
+
+    [SerializeField] private float timeBetweenHitMultiplier;
+    [SerializeField] private float noteSwitchMultiplier;
+    [SerializeField] private float baseNoteScore;
+
+    [SerializeField] private Slider crowdSlider;
+    [SerializeField] private float crowdMaxValue;
 
     private void Awake()
     {
@@ -53,6 +67,9 @@ public class InputTracker : MonoBehaviour
         redIndicatorMesh.material.color = Color.red;
         greenIndicatorMesh.material.color = Color.green;
         blueIndicatorMesh.material.color = Color.blue;
+        inputTrackingTime = stateManager.roundTime;
+        crowdSlider.maxValue = crowdMaxValue;
+        crowdSlider.minValue = 0;
 
     }
 
@@ -82,9 +99,12 @@ public class InputTracker : MonoBehaviour
 
     private void HitRed(InputAction.CallbackContext context)
     {
-        redHitDetected = true;
-        redIndicatorMesh.material.color = Color.grey;
-        redColorTimer = colorChangeTime;
+        if (trackInputs)
+        {
+            redHitDetected = true;
+            redIndicatorMesh.material.color = Color.grey;
+            redColorTimer = colorChangeTime;
+        }
 
     }
 
@@ -95,9 +115,12 @@ public class InputTracker : MonoBehaviour
 
     private void HitBlue(InputAction.CallbackContext context)
     {
-        blueHitDetected = true;
-        blueIndicatorMesh.material.color = Color.grey;
-        blueColorTimer = colorChangeTime;
+        if (trackInputs)
+        {
+            blueHitDetected = true;
+            blueIndicatorMesh.material.color = Color.grey;
+            blueColorTimer = colorChangeTime;
+        }
 
     }
 
@@ -108,9 +131,12 @@ public class InputTracker : MonoBehaviour
 
     private void HitGreen(InputAction.CallbackContext context)
     {
-        greenHitDetected = true;
-        greenIndicatorMesh.material.color = Color.grey;
-        greenColorTimer = colorChangeTime;
+        if (trackInputs)
+        {
+            greenHitDetected = true;
+            greenIndicatorMesh.material.color = Color.grey;
+            greenColorTimer = colorChangeTime;
+        }
     }
 
     private void LetGoGreen(InputAction.CallbackContext context)
@@ -118,13 +144,42 @@ public class InputTracker : MonoBehaviour
 
     }
 
+    private void AddScore(int inputColor, float timeInputted)
+    {
+        float timeBonus = 1;
+        float noteChangeBonus = 1;
+
+        if (inputColor != lastInput)
+        {
+            noteChangeBonus = noteSwitchMultiplier;
+        }
+
+        timeBonus = timeBetweenHitMultiplier / (timeInputted - lastInputTime);
+
+        float scoreToAdd = baseNoteScore + (baseNoteScore * timeBonus) + (noteChangeBonus * baseNoteScore);
+
+        Debug.Log("adding score");
+        crowdSlider.value = crowdSlider.value +  scoreToAdd;
+        
+        secondToLastInput = lastInput;
+        secondToLastInputTime = lastInputTime;
+        lastInput = inputColor;
+        lastInputTime = timeInputted;
+    
+    }
 
 
-    private void StartTracking()
+    public void StartTracking()
     {
         //reset timer, iterator
         inputTrackingTimer = 0;
         inputIterator = 0;
+
+        //reset score tracking vars
+        lastInput = 0;
+        lastInputTime = 0;
+        secondToLastInput = 0;
+        secondToLastInputTime = 0;
 
         //re init arrays
         Array.Clear(hitInputs, 0, 2000);
@@ -138,6 +193,7 @@ public class InputTracker : MonoBehaviour
     {
         trackInputs = false;
         hitInputs[inputIterator] = -1;
+        crowdSlider.value = 0;
         PrintHitInputArray();
     }
 
@@ -210,6 +266,8 @@ public class InputTracker : MonoBehaviour
             hitInputs[inputIterator] = 1;
             hitTimes[inputIterator] = inputTrackingTimer;
             inputIterator += 1;
+            AddScore(1, inputTrackingTimer);
+
         }
         else if (blueHitDetected)
         {
@@ -217,6 +275,7 @@ public class InputTracker : MonoBehaviour
             hitInputs[inputIterator] = 2;
             hitTimes[inputIterator] = inputTrackingTimer;
             inputIterator += 1;
+            AddScore(2, inputTrackingTimer);
         }
         else if (greenHitDetected)
         {
@@ -224,6 +283,7 @@ public class InputTracker : MonoBehaviour
             hitInputs[inputIterator] = 3;
             hitTimes[inputIterator] = inputTrackingTimer;
             inputIterator += 1;
+            AddScore(3, inputTrackingTimer);
         }
 
 
@@ -247,7 +307,7 @@ public class InputTracker : MonoBehaviour
         }
     }
 
-    private void BeginHitPlayback()
+    public void BeginHitPlayback()
     {
         playbackTimer = 0;
         hitToPlay= 0;
@@ -264,7 +324,7 @@ public class InputTracker : MonoBehaviour
 
         playbackTimer += Time.deltaTime;
 
-        if (playbackTimer > inputTrackingTime)
+        if (playbackTimer > (inputTrackingTime+1))
         {
             playbackHits = false;
             Debug.Log("Playback Over");
