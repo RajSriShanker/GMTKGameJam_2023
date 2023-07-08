@@ -147,9 +147,14 @@ public class GameStateManager : MonoBehaviour
         if (!secondFighterStateRun)
         {
             recieverManager.StartTracking();
-            timerManager.StartSecondFighterTimer();
             inputTracker.BeginHitPlayback();
             secondFighterStateRun = true;
+        }
+
+        if (inputTracker.allAttacksPlayed)
+        {
+            timerManager.StartSecondFighterTimer();
+            inputTracker.allAttacksPlayed = false;
         }
 
         if (timerManager.secondFighterTimerDone)
