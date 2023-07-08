@@ -35,6 +35,7 @@ public class HitReceiverManager : MonoBehaviour
     [SerializeField] private float playerMaxHealth;
     [SerializeField] private Slider playerHealthSlider;
     [SerializeField] private float healthLostOnHit;
+    [SerializeField] private IndicatorManager indicatorManager;
 
     private void Awake()
     {
@@ -152,6 +153,7 @@ public class HitReceiverManager : MonoBehaviour
             if (redTarget.currentlySelectedHit != null)
             {
                 Destroy(redTarget.currentlySelectedHit);
+                indicatorManager.ShowDodge();
             }
             redHitDetected = false;
         }
@@ -162,6 +164,7 @@ public class HitReceiverManager : MonoBehaviour
             if (blueTarget.currentlySelectedHit != null)
             {
                 Destroy(blueTarget.currentlySelectedHit);
+                indicatorManager.ShowDodge();
             }
             blueHitDetected = false;
         }
@@ -172,6 +175,7 @@ public class HitReceiverManager : MonoBehaviour
             if (greenTarget.currentlySelectedHit != null)
             {
                 Destroy(greenTarget.currentlySelectedHit);
+                indicatorManager.ShowDodge();
             }
             greenHitDetected = false;
         }
@@ -181,6 +185,7 @@ public class HitReceiverManager : MonoBehaviour
             Destroy(playerTarget.currentlySelectedHit);
             playerHealth -= healthLostOnHit;
             playerHealthSlider.value = playerHealth;
+            indicatorManager.ShowHit();
         }
     }
 
