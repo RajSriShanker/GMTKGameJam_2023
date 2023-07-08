@@ -21,6 +21,7 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private InputTracker inputTracker;
     public float roundTime;
     public float secondRoundBufferTime;
+    [SerializeField] private HitReceiverManager recieverManager;
 
     private void Awake()
     {
@@ -141,6 +142,7 @@ public class GameStateManager : MonoBehaviour
     {
         if (!secondFighterStateRun)
         {
+            recieverManager.StartTracking();
             timerManager.StartSecondFighterTimer();
             inputTracker.BeginHitPlayback();
             secondFighterStateRun = true;
@@ -148,6 +150,7 @@ public class GameStateManager : MonoBehaviour
 
         if (timerManager.secondFighterTimerDone)
         {
+            recieverManager.EndTracking();
             secondFighterStateRun = false;
             timerManager.secondFighterTimerDone = false;
             return 2;
