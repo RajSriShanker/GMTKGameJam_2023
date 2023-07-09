@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
-using DG.Tweening;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -173,11 +170,15 @@ public class InputTracker : MonoBehaviour
         crowdSlider.minValue = 0;
         comboIterator = 0;
         validComboIntList = new ComboInt[30];
+        FMODUnity.RuntimeManager.PlayOneShot("event:/Combo/Combo1");
         comboAttacksInt = new ComboAttacksInt[30];
         CreateComboTable();
         combosToPlay = new int[50];
 
     }
+
+
+
 
     private void CreateComboTable()
     {
@@ -399,8 +400,8 @@ public class InputTracker : MonoBehaviour
     {
 
         Debug.Log("adding score");
-        crowdSlider.value = crowdSlider.value +  scoreToAdd;;
-    
+        crowdSlider.value = crowdSlider.value + scoreToAdd; ;
+
     }
 
 
@@ -587,13 +588,13 @@ public class InputTracker : MonoBehaviour
     }
     private void PrintHitInputArray()
     {
-        for(int a = 0; a < 2000 ; a++)
+        for (int a = 0; a < 2000; a++)
         {
             if (hitInputs[a] != 0)
                 //Debug.Log("Hit input " + a + " = " + hitInputs[a] + " Hit Found at time " + hitTimes[a]);
 
-            if (hitInputs[a] == -1)
-                break;
+                if (hitInputs[a] == -1)
+                    break;
         }
     }
 

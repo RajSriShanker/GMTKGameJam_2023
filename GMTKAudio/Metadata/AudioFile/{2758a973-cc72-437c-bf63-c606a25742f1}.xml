@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{2758a973-cc72-437c-bf63-c606a25742f1}">
+		<property name="assetPath">
+			<value>FF_AF_foley_punch_whoosh_gold.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.29625850340136056</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{4985e98c-0ca7-43d3-b62f-8e32e03ba296}</destination>
+		</relationship>
+	</object>
+</objects>
