@@ -157,6 +157,10 @@ public class InputTracker : MonoBehaviour
     private GameObject currentlyDisplayedSprite;
     [SerializeField] private CameraShakeController shakeController;
     [SerializeField] private CharacterAnimator animator;
+    [SerializeField] private FMODPlayer soundPlayer;
+    [SerializeField] private float booCooldownTime;
+    private float booCooldown;
+    private int combosInARow;
 
 
 
@@ -353,6 +357,7 @@ public class InputTracker : MonoBehaviour
             redSprite.color = greyColor;
             redColorTimer = colorChangeTime;
             animator.StartMidAttack();
+            soundPlayer.PlayRedShot();
         }
 
     }
@@ -370,6 +375,7 @@ public class InputTracker : MonoBehaviour
             blueSprite.color = greyColor;
             blueColorTimer = colorChangeTime;
             animator.StartLowAttack();
+            soundPlayer.PlayBlueShot();
 
         }
 
@@ -388,6 +394,7 @@ public class InputTracker : MonoBehaviour
             greenSprite.color = greyColor;
             greenColorTimer = colorChangeTime;
             animator.StartHighAttack();
+            soundPlayer.PlayGreenShot();
         }
     }
 
@@ -399,7 +406,7 @@ public class InputTracker : MonoBehaviour
     private void AddScore(int scoreToAdd)
     {
 
-        Debug.Log("adding score");
+        //Debug.Log("adding score");
         crowdSlider.value = crowdSlider.value + scoreToAdd; ;
 
     }
@@ -485,6 +492,11 @@ public class InputTracker : MonoBehaviour
                 blueSprite.color = blueColor;
             }
         }
+
+        if (booCooldown > 0)
+        {
+            booCooldown -= Time.deltaTime;
+        }
     }
 
     private void UpdateTrackingArray()
@@ -511,28 +523,40 @@ public class InputTracker : MonoBehaviour
 
     }
 
+    private void CheckForBooReady()
+    {
+        if (booCooldown <= 0)
+        {
+            Debug.Log("playing Boo");
+            soundPlayer.PlayBoo();
+            booCooldown = booCooldownTime;
+        }
+    }
+
     private void CheckCombo()
     {
-        Debug.Log("Checking combo input, input iterator = " + inputIterator);
+        //Debug.Log("Checking combo input, input iterator = " + inputIterator);
         //if the input in the sequence does not match the expected one
         if (hitInputs[inputIterator] != validComboIntList[currentDisplayedCombo].moves[inputIterator])
         {
-            Debug.Log("Combo invalid, spawning new");
+            combosInARow = 0;
+            //Debug.Log("Combo invalid, spawning new");
             shakeController.OnShake(0.1f, 0.2f);
             indicatorManager.ShowComboFail();
+            CheckForBooReady();
             DisplayNewCombo();
             
         }
         //if not invalid and is the final iterator, register combo
         else if (inputIterator == validComboIntList[currentDisplayedCombo].length-1)
         {
-            Debug.Log("combo over, register combo");
+            //Debug.Log("combo over, register combo");
             RegisterCombo(currentDisplayedCombo);
         }
         //correct input but not done, update combo display
         else
         {
-            Debug.Log("Correct input, not done so update display");
+            //Debug.Log("Correct input, not done so update display");
             inputIterator += 1;
             UpdateComboDisplay(inputIterator);
         }
@@ -543,46 +567,50 @@ public class InputTracker : MonoBehaviour
 
     private void UpdateComboDisplay(int iterator)
     {
-        Debug.Log("updating combo display, iterator = " + iterator + " current displayed combo = " + currentDisplayedCombo);
+        //Debug.Log("updating combo display, iterator = " + iterator + " current displayed combo = " + currentDisplayedCombo);
         Destroy(currentlyDisplayedSprite);
         if (currentDisplayedCombo == 0)
         {
-            Debug.Log("Creating Combo 0, move " + iterator);
+            //Debug.Log("Creating Combo 0, move " + iterator);
             currentlyDisplayedSprite = Instantiate(combo0SpriteList[iterator], spriteDisplayTransform);
         }
         else if (currentDisplayedCombo == 1)
         {
-            Debug.Log("Creating Combo 1, move " + iterator);
+            //Debug.Log("Creating Combo 1, move " + iterator);
             currentlyDisplayedSprite = Instantiate(combo1SpriteList[iterator], spriteDisplayTransform);
         }
         else if (currentDisplayedCombo == 2)
         {
-            Debug.Log("Creating Combo 2, move " + iterator);
+            //Debug.Log("Creating Combo 2, move " + iterator);
             currentlyDisplayedSprite = Instantiate(combo2SpriteList[iterator], spriteDisplayTransform);
         }
         else if (currentDisplayedCombo == 3)
         {
-            Debug.Log("Creating Combo 3, move " + iterator);
+            //Debug.Log("Creating Combo 3, move " + iterator);
             currentlyDisplayedSprite = Instantiate(combo3SpriteList[iterator], spriteDisplayTransform);
         }
         else if (currentDisplayedCombo == 4)
         {
-            Debug.Log("Creating Combo 4, move " + iterator);
+            //Debug.Log("Creating Combo 4, move " + iterator);
             currentlyDisplayedSprite = Instantiate(combo4SpriteList[iterator], spriteDisplayTransform);
         }
         else if (currentDisplayedCombo == 5)
         {
-            Debug.Log("Creating Combo 5, move " + iterator);
+            //Debug.Log("Creating Combo 5, move " + iterator);
             currentlyDisplayedSprite = Instantiate(combo5SpriteList[iterator], spriteDisplayTransform);
         }
     }
 
     private void RegisterCombo(int comboNum)
     {
-        Debug.Log("Combo " + comboNum + "  has been performed");
+        //Debug.Log("Combo " + comboNum + "  has been performed");
         combosToPlay[maxComboToPlay] = comboNum;
         maxComboToPlay += 1;
         indicatorManager.ShowCombo();
+        soundPlayer.PlayCombo();
+        combosInARow += 1;
+        if (combosInARow >= 3)
+            soundPlayer.PlayCheer();
         AddScore(25); //TEMP
         DisplayNewCombo();
     }
@@ -600,7 +628,7 @@ public class InputTracker : MonoBehaviour
 
     public void BeginHitPlayback()
     {
-        Debug.Log("beggining hit playback");
+        //Debug.Log("beggining hit playback");
         playbackHits = true;
         combosPlayed = 0;
         comboInProgress = true; ;
@@ -612,7 +640,7 @@ public class InputTracker : MonoBehaviour
     {
         if (combosPlayed >= maxComboToPlay) //done playing combos
         {
-            Debug.Log("combos played  = " + combosPlayed + ", max combo to play = " + maxComboToPlay + ", done playing combos");
+            //Debug.Log("combos played  = " + combosPlayed + ", max combo to play = " + maxComboToPlay + ", done playing combos");
             playbackHits = false;
             allAttacksPlayed = true;
             Array.Clear(combosToPlay, 0, 20);
@@ -625,7 +653,7 @@ public class InputTracker : MonoBehaviour
 
             if (betweenComboTimer <= 0)
             {
-                Debug.Log("start another combo after time delay");
+                //Debug.Log("start another combo after time delay");
                 //reset individual combo vars (combo being the set of orbs that come out per combo)
                 comboInProgress = true;
                 comboTimer = 0;
@@ -636,7 +664,7 @@ public class InputTracker : MonoBehaviour
         {
             if (currentComboMove >= comboAttacksInt[combosToPlay[combosPlayed]].totalMoves)
             {
-                Debug.Log("current moves total moves are done, increase combos played");
+                //Debug.Log("current moves total moves are done, increase combos played");
                 comboInProgress = false;
                 betweenComboTimer = timeBetweenCombos;
                 combosPlayed += 1;
@@ -644,7 +672,7 @@ public class InputTracker : MonoBehaviour
             }
             else if (comboAttacksInt[combosToPlay[combosPlayed]].hitTimes[currentComboMove] < comboTimer)
             {
-                Debug.Log("running attack " + currentComboMove + " in for combo " + combosToPlay[combosPlayed] + " which is combo " + combosPlayed + " in the list");
+                //Debug.Log("running attack " + currentComboMove + " in for combo " + combosToPlay[combosPlayed] + " which is combo " + combosPlayed + " in the list");
                 PlayHit(comboAttacksInt[combosToPlay[combosPlayed]].hits[currentComboMove], comboAttacksInt[combosToPlay[combosPlayed]].hitSpeeds[currentComboMove]);
                 currentComboMove += 1;
             }
@@ -657,7 +685,7 @@ public class InputTracker : MonoBehaviour
     {
         if (hitToPlay == 1)  //red
         {
-            Debug.Log("RED HIT");
+            //Debug.Log("RED HIT");
             GameObject redShotInst = Instantiate(redShot, redIndicator.transform);
             redShotInst.GetComponent<Rigidbody>().velocity = new Vector3(speed, 0f, 0f);
             Destroy(redShotInst, 3f);
@@ -665,14 +693,14 @@ public class InputTracker : MonoBehaviour
         }
         if (hitToPlay == 2) //blue
         {
-            Debug.Log("BLUE HIT");
+            //Debug.Log("BLUE HIT");
             GameObject blueShotInst = Instantiate(blueShot, blueIndicator.transform);
             blueShotInst.GetComponent<Rigidbody>().velocity = new Vector3(speed, 0f, 0f);
             Destroy(blueShotInst, 3f);
         }
         if (hitToPlay == 3) //green
         {
-            Debug.Log("GREEN HIT");
+            //Debug.Log("GREEN HIT");
             GameObject greenShotInst = Instantiate(greenShot, greenIndicator.transform);
             greenShotInst.GetComponent<Rigidbody>().velocity = new Vector3(speed, 0f, 0f);
             Destroy(greenShotInst, 3f);
@@ -682,7 +710,7 @@ public class InputTracker : MonoBehaviour
     private void DisplayNewCombo()
     {
         currentDisplayedCombo = Random.Range(0, 5);
-        Debug.Log("Current combo = " + currentDisplayedCombo);
+        //Debug.Log("Current combo = " + currentDisplayedCombo);
 
         inputIterator = 0;
 

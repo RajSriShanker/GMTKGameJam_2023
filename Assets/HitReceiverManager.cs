@@ -45,6 +45,15 @@ public class HitReceiverManager : MonoBehaviour
     [SerializeField] private Color greyColor;
     [SerializeField] private CameraShakeController shakeController;
     [SerializeField] private CharacterAnimator animator;
+    [SerializeField] private FMODPlayer soundPlayer;
+    private int blocksInARow;
+    private int failsInARow;
+    [SerializeField] private int failsInARowAllowed;
+    [SerializeField] private int blocksInARowForCheer;
+    [SerializeField] private float booCoolDown;
+    private float bootimer;
+    private bool booAllowed;
+
 
     private void Awake()
     {
@@ -62,6 +71,7 @@ public class HitReceiverManager : MonoBehaviour
         redMesh.color = redColor;
         greenMesh.color = greenColor;
         blueMesh.color = blueColor;
+        booAllowed = true;
     }
 
     private void OnEnable()
@@ -184,6 +194,7 @@ public class HitReceiverManager : MonoBehaviour
     private void Update()
     {
         CheckReceivers();
+        CheckBooTimer();
     }
 
     public void StartTracking()
@@ -203,9 +214,11 @@ public class HitReceiverManager : MonoBehaviour
             if (redTarget.currentlySelectedHit != null)
             {
                 Destroy(redTarget.currentlySelectedHit);
+                soundPlayer.PlayDodge();
                 indicatorManager.ShowDodge();
                 animator.StartMidAttack();
                 animator.StartMidDodge();
+                RegisterBlock();
             }
         }
 
@@ -215,9 +228,11 @@ public class HitReceiverManager : MonoBehaviour
             if (blueTarget.currentlySelectedHit != null)
             {
                 Destroy(blueTarget.currentlySelectedHit);
+                soundPlayer.PlayDodge();
                 indicatorManager.ShowDodge();
                 animator.StartLowAttack();
                 animator.StartLowDodge();
+                RegisterBlock();
             }
         }
 
@@ -227,9 +242,11 @@ public class HitReceiverManager : MonoBehaviour
             if (greenTarget.currentlySelectedHit != null)
             {
                 Destroy(greenTarget.currentlySelectedHit);
+                soundPlayer.PlayDodge();
                 indicatorManager.ShowDodge();
                 animator.StartHighAttack();
                 animator.StartHighDodge();
+                RegisterBlock();
             }
         }
 
@@ -238,8 +255,46 @@ public class HitReceiverManager : MonoBehaviour
             Destroy(playerTarget.currentlySelectedHit);
             playerHealth -= healthLostOnHit;
             playerHealthSlider.value = playerHealth;
+            soundPlayer.PlayHurt();
+            blocksInARow = 0;
             indicatorManager.ShowHit();
+            RegisterBoo();
             shakeController.OnShake(0.1f, 0.2f);
+        }
+    }
+
+    private void RegisterBlock()
+    {
+        failsInARow = 0;
+        blocksInARow += 1;
+        if (blocksInARow >= blocksInARowForCheer)
+        {
+            blocksInARow = 0;
+            soundPlayer.PlayCheer();
+        }
+    }
+
+    private void RegisterBoo()
+    {
+        failsInARow += 1;
+        if ((failsInARow >= failsInARowAllowed) && (booAllowed))
+        {
+            soundPlayer.PlayBoo();
+            failsInARow = 0;
+            bootimer = booCoolDown;
+            booAllowed = false;
+        }
+    }
+
+    private void CheckBooTimer()
+    {
+        if (bootimer > 0)
+        {
+            bootimer -= Time.deltaTime;
+            if (bootimer <= 0)
+            {
+                booAllowed = true;
+            }
         }
     }
 
