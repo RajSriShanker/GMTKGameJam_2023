@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
+
 
 [System.Serializable]
 public struct Combo
@@ -20,11 +22,7 @@ public struct Combo
 public struct ComboInt
 {
     public int moveNum;
-    public int move1;
-    public int move2;
-    public int move3;
-    public int move4;
-    public int move5;
+    public int[] moves;
     public int length;
 }
 
@@ -59,6 +57,17 @@ public enum HitType
     right//6
 }
 
+public struct ComboSprites
+{
+    public GameObject[] combo0Sprites;
+    public GameObject[] combo1Sprites;
+    public GameObject[] combo2Sprites;
+    public GameObject[] combo3Sprites;
+    public GameObject[] combo4Sprites;
+    public GameObject[] combo5Sprites;
+
+}
+
 public class InputTracker : MonoBehaviour
 {
     [SerializeField] private InputActionReference redAction;
@@ -90,6 +99,14 @@ public class InputTracker : MonoBehaviour
     [SerializeField] private GameObject greenIndicator;
     [SerializeField] private GameObject blueIndicator;
 
+    [SerializeField] private SpriteRenderer redSprite;
+    [SerializeField] private SpriteRenderer greenSprite;
+    [SerializeField] private SpriteRenderer blueSprite;
+    [SerializeField] private Color redColor;
+    [SerializeField] private Color greenColor;
+    [SerializeField] private Color blueColor;
+    [SerializeField] private Color greyColor;
+
     private MeshRenderer redIndicatorMesh;
     private MeshRenderer greenIndicatorMesh;
     private MeshRenderer blueIndicatorMesh;
@@ -99,10 +116,10 @@ public class InputTracker : MonoBehaviour
     [SerializeField] private float colorChangeTime;
     [SerializeField] private GameStateManager stateManager;
 
-    private int lastInput;
-    private float lastInputTime;
-    private int secondToLastInput;
-    private float secondToLastInputTime;
+    //private int lastInput;
+    //private float lastInputTime;
+    //private int secondToLastInput;
+    //private float secondToLastInputTime;
 
     [SerializeField] private float timeBetweenHitMultiplier;
     [SerializeField] private float noteSwitchMultiplier;
@@ -128,16 +145,25 @@ public class InputTracker : MonoBehaviour
     private ComboInt[] validComboIntList;
     [SerializeField] private ComboAttacks[] comboAttacks;
     [SerializeField] private ComboAttacksInt[] comboAttacksInt;
+    [SerializeField] private IndicatorManager indicatorManager;
+    private int currentDisplayedCombo;
+    public GameObject[] combo0SpriteList;
+    public GameObject[] combo1SpriteList;
+    public GameObject[] combo2SpriteList;
+    public GameObject[] combo3SpriteList;
+    public GameObject[] combo4SpriteList;
+    public GameObject[] combo5SpriteList;
+    [SerializeField] private Transform spriteDisplayTransform;
+    private GameObject currentlyDisplayedSprite;
+    [SerializeField] private CameraShakeController shakeController;
+
 
 
     private void Awake()
     {
-        redIndicatorMesh = redIndicator.GetComponent<MeshRenderer>();
-        greenIndicatorMesh = greenIndicator.GetComponent<MeshRenderer>();
-        blueIndicatorMesh = blueIndicator.GetComponent<MeshRenderer>();
-        redIndicatorMesh.material.color = Color.red;
-        greenIndicatorMesh.material.color = Color.green;
-        blueIndicatorMesh.material.color = Color.blue;
+        redSprite.color = redColor;
+        greenSprite.color = greenColor;
+        blueSprite.color = blueColor;
         inputTrackingTime = stateManager.roundTime;
         crowdSlider.maxValue = crowdMaxValue;
         crowdSlider.minValue = 0;
@@ -146,7 +172,7 @@ public class InputTracker : MonoBehaviour
         FMODUnity.RuntimeManager.PlayOneShot("event:/Combo/Combo1");
         comboAttacksInt = new ComboAttacksInt[30];
         CreateComboTable();
-        combosToPlay = new int[20];
+        combosToPlay = new int[50];
 
     }
 
@@ -170,6 +196,100 @@ public class InputTracker : MonoBehaviour
         }
     }
 
+
+    private ComboInt TranslateComboList(Combo combo)
+    {
+        ComboInt comboToReturn = new ComboInt();
+        comboToReturn.moves = new int[6];
+        //move num
+        comboToReturn.moveNum = combo.moveNum;
+
+        //move 1
+        if (combo.move1 == HitType.red)
+            comboToReturn.moves[0] = 1;
+        else if (combo.move1 == HitType.blue)
+            comboToReturn.moves[0] = 2;
+        else if (combo.move1 == HitType.green)
+            comboToReturn.moves[0] = 3;
+        else if (combo.move1 == HitType.up)
+            comboToReturn.moves[0] = 4;
+        else if (combo.move1 == HitType.down)
+            comboToReturn.moves[0] = 5;
+        else if (combo.move1 == HitType.right)
+            comboToReturn.moves[0] = 6;
+        else comboToReturn.moves[0] = 0;
+
+
+        //move 2
+        if (combo.move2 == HitType.red)
+            comboToReturn.moves[1] = 1;
+        else if (combo.move2 == HitType.blue)
+            comboToReturn.moves[1] = 2;
+        else if (combo.move2 == HitType.green)
+            comboToReturn.moves[1] = 3;
+        else if (combo.move2 == HitType.up)
+            comboToReturn.moves[1] = 4;
+        else if (combo.move2 == HitType.down)
+            comboToReturn.moves[1] = 5;
+        else if (combo.move2 == HitType.right)
+            comboToReturn.moves[1] = 6;
+        else comboToReturn.moves[1] = 0;
+
+
+        //move 3
+        if (combo.move3 == HitType.red)
+            comboToReturn.moves[2] = 1;
+        else if (combo.move3 == HitType.blue)
+            comboToReturn.moves[2] = 2;
+        else if (combo.move3 == HitType.green)
+            comboToReturn.moves[2] = 3;
+        else if (combo.move3 == HitType.up)
+            comboToReturn.moves[2] = 4;
+        else if (combo.move3 == HitType.down)
+            comboToReturn.moves[2] = 5;
+        else if (combo.move3 == HitType.right)
+            comboToReturn.moves[2] = 6;
+        else comboToReturn.moves[2] = 0;
+
+
+        //move 4
+        if (combo.move4 == HitType.red)
+            comboToReturn.moves[3] = 1;
+        else if (combo.move4 == HitType.blue)
+            comboToReturn.moves[3] = 2;
+        else if (combo.move4 == HitType.green)
+            comboToReturn.moves[3] = 3;
+        else if (combo.move4 == HitType.up)
+            comboToReturn.moves[3] = 4;
+        else if (combo.move4 == HitType.down)
+            comboToReturn.moves[3] = 5;
+        else if (combo.move4 == HitType.right)
+            comboToReturn.moves[3] = 6;
+        else comboToReturn.moves[3] = 0;
+
+
+        //move 5
+        if (combo.move5 == HitType.red)
+            comboToReturn.moves[4] = 1;
+        else if (combo.move5 == HitType.blue)
+            comboToReturn.moves[4] = 2;
+        else if (combo.move5 == HitType.green)
+            comboToReturn.moves[4] = 3;
+        else if (combo.move5 == HitType.up)
+            comboToReturn.moves[4] = 4;
+        else if (combo.move5 == HitType.down)
+            comboToReturn.moves[4] = 5;
+        else if (combo.move5 == HitType.right)
+            comboToReturn.moves[4] = 6;
+        else comboToReturn.moves[4] = 0;
+
+        //length
+        comboToReturn.length = combo.length;
+
+        return comboToReturn;
+
+    }
+
     private ComboAttacksInt TranslateAttackList(ComboAttacks attacks)
     {
         ComboAttacksInt attacksToReturn = new ComboAttacksInt();
@@ -178,7 +298,6 @@ public class InputTracker : MonoBehaviour
         attacksToReturn.hitTimes = attacks.hitTimes;
         attacksToReturn.totalMoves = attacks.totalMoves;
         attacksToReturn.hits = new int[attacks.hits.Length];
-        
 
         for (int u = 0; u < attacks.hits.Length; u++)
         {
@@ -199,99 +318,6 @@ public class InputTracker : MonoBehaviour
         }
 
         return attacksToReturn;
-    }
-
-    private ComboInt TranslateComboList(Combo combo)
-    {
-        ComboInt comboToReturn = new ComboInt();
-        //move num
-        comboToReturn.moveNum = combo.moveNum;
-
-        //move 1
-        if (combo.move1 == HitType.red)
-            comboToReturn.move1 = 1;
-        else if (combo.move1 == HitType.blue)
-            comboToReturn.move1 = 2;
-        else if (combo.move1 == HitType.green)
-            comboToReturn.move1 = 3;
-        else if (combo.move1 == HitType.up)
-            comboToReturn.move1 = 4;
-        else if (combo.move1 == HitType.down)
-            comboToReturn.move1 = 5;
-        else if (combo.move1 == HitType.right)
-            comboToReturn.move1 = 6;
-        else comboToReturn.move1 = 0;
-
-
-        //move 2
-        if (combo.move2 == HitType.red)
-            comboToReturn.move2 = 1;
-        else if (combo.move2 == HitType.blue)
-            comboToReturn.move2 = 2;
-        else if (combo.move2 == HitType.green)
-            comboToReturn.move2 = 3;
-        else if (combo.move2 == HitType.up)
-            comboToReturn.move2 = 4;
-        else if (combo.move2 == HitType.down)
-            comboToReturn.move2 = 5;
-        else if (combo.move2 == HitType.right)
-            comboToReturn.move2 = 6;
-
-        else comboToReturn.move2 = 0;
-
-
-        //move 3
-        if (combo.move3 == HitType.red)
-            comboToReturn.move3 = 1;
-        else if (combo.move3 == HitType.blue)
-            comboToReturn.move3 = 2;
-        else if (combo.move3 == HitType.green)
-            comboToReturn.move3 = 3;
-        else if (combo.move3 == HitType.up)
-            comboToReturn.move3 = 4;
-        else if (combo.move3 == HitType.down)
-            comboToReturn.move3 = 5;
-        else if (combo.move3 == HitType.right)
-            comboToReturn.move3 = 6;
-        else comboToReturn.move3 = 0;
-
-
-        //move 4
-        if (combo.move4 == HitType.red)
-            comboToReturn.move4 = 1;
-        else if (combo.move4 == HitType.blue)
-            comboToReturn.move4 = 2;
-        else if (combo.move4 == HitType.green)
-            comboToReturn.move4 = 3;
-        else if (combo.move4 == HitType.up)
-            comboToReturn.move4 = 4;
-        else if (combo.move4 == HitType.down)
-            comboToReturn.move4 = 5;
-        else if (combo.move4 == HitType.right)
-            comboToReturn.move4 = 6;
-        else comboToReturn.move4 = 0;
-
-
-        //move 5
-        if (combo.move5 == HitType.red)
-            comboToReturn.move5 = 1;
-        else if (combo.move5 == HitType.blue)
-            comboToReturn.move5 = 2;
-        else if (combo.move5 == HitType.green)
-            comboToReturn.move5 = 3;
-        else if (combo.move5 == HitType.up)
-            comboToReturn.move5 = 4;
-        else if (combo.move5 == HitType.down)
-            comboToReturn.move5 = 5;
-        else if (combo.move5 == HitType.right)
-            comboToReturn.move5 = 6;
-        else comboToReturn.move5 = 0;
-
-        //length
-        comboToReturn.length = combo.length;
-
-        return comboToReturn;
-
     }
 
 
@@ -323,7 +349,7 @@ public class InputTracker : MonoBehaviour
         if (trackInputs)
         {
             redHitDetected = true;
-            redIndicatorMesh.material.color = Color.grey;
+            redSprite.color = greyColor;
             redColorTimer = colorChangeTime;
             FMODUnity.RuntimeManager.PlayOneShot("event:/High Punch", GetComponent<Transform>().position);
         }
@@ -340,7 +366,7 @@ public class InputTracker : MonoBehaviour
         if (trackInputs)
         {
             blueHitDetected = true;
-            blueIndicatorMesh.material.color = Color.grey;
+            blueSprite.color = greyColor;
             blueColorTimer = colorChangeTime;
         }
 
@@ -356,7 +382,7 @@ public class InputTracker : MonoBehaviour
         if (trackInputs)
         {
             greenHitDetected = true;
-            greenIndicatorMesh.material.color = Color.grey;
+            greenSprite.color = greyColor;
             greenColorTimer = colorChangeTime;
             FMODUnity.RuntimeManager.PlayOneShot("event:/Punch2", GetComponent<Transform>().position);
         }
@@ -378,29 +404,21 @@ public class InputTracker : MonoBehaviour
 
     public void StartTracking()
     {
-        //reset timer, iterator
-        inputTrackingTimer = 0;
         inputIterator = 0;
-        comboIterator = 0;
-
-        //reset score tracking vars
-        lastInput = 0;
-        lastInputTime = 0;
-        secondToLastInput = 0;
-        secondToLastInputTime = 0;
 
         //re init arrays
         Array.Clear(hitInputs, 0, 2000);
-        Array.Clear(hitTimes, 0, 2000);
 
         //turn on tracking
         trackInputs = true;
+
+        DisplayNewCombo();
     }
 
     public void EndTracking()
     {
         trackInputs = false;
-        hitInputs[inputIterator] = -1;
+        //hitInputs[inputIterator] = -1;
         crowdSlider.value = 0;
         PrintHitInputArray();
     }
@@ -443,7 +461,7 @@ public class InputTracker : MonoBehaviour
             redColorTimer -= Time.deltaTime;
             if (redColorTimer <= 0)
             {
-                redIndicatorMesh.material.color = Color.red;
+                redSprite.color = redColor;
             }
         }
 
@@ -452,7 +470,7 @@ public class InputTracker : MonoBehaviour
             greenColorTimer -= Time.deltaTime;
             if (greenColorTimer <= 0)
             {
-                greenIndicatorMesh.material.color = Color.green;
+                greenSprite.color = greenColor;
             }
         }
 
@@ -461,7 +479,7 @@ public class InputTracker : MonoBehaviour
             blueColorTimer -= Time.deltaTime;
             if (blueColorTimer <= 0)
             {
-                blueIndicatorMesh.material.color = Color.blue;
+                blueSprite.color = blueColor;
             }
         }
     }
@@ -472,111 +490,88 @@ public class InputTracker : MonoBehaviour
         {
             redHitDetected = false;
             hitInputs[inputIterator] = 1;
-            hitTimes[inputIterator] = inputTrackingTimer;
-            comboIterator += 1;
-            CheckForCombo();
-            inputIterator += 1;
+            CheckCombo();
 
         }
         else if (blueHitDetected)
         {
             blueHitDetected = false;
             hitInputs[inputIterator] = 2;
-            hitTimes[inputIterator] = inputTrackingTimer;
-            comboIterator += 1;
-            CheckForCombo();
-            inputIterator += 1;
+            CheckCombo();
         }
         else if (greenHitDetected)
         {
             greenHitDetected = false;
             hitInputs[inputIterator] = 3;
-            hitTimes[inputIterator] = inputTrackingTimer;
-            comboIterator += 1;
-            CheckForCombo();
+            CheckCombo();
+        }
+
+    }
+
+    private void CheckCombo()
+    {
+        Debug.Log("Checking combo input, input iterator = " + inputIterator);
+        //if the input in the sequence does not match the expected one
+        if (hitInputs[inputIterator] != validComboIntList[currentDisplayedCombo].moves[inputIterator])
+        {
+            Debug.Log("Combo invalid, spawning new");
+            shakeController.OnShake(0.1f, 0.2f);
+            indicatorManager.ShowComboFail();
+            DisplayNewCombo();
+            
+        }
+        //if not invalid and is the final iterator, register combo
+        else if (inputIterator == validComboIntList[currentDisplayedCombo].length-1)
+        {
+            Debug.Log("combo over, register combo");
+            RegisterCombo(currentDisplayedCombo);
+        }
+        //correct input but not done, update combo display
+        else
+        {
+            Debug.Log("Correct input, not done so update display");
             inputIterator += 1;
+            UpdateComboDisplay(inputIterator);
         }
+        
 
 
-        //increase time
-        inputTrackingTimer += Time.deltaTime;
     }
 
-    private void CheckForCombo()
+    private void UpdateComboDisplay(int iterator)
     {
-        if (comboIterator >= 5)
-            CheckForFiveHit();
-        if (comboIterator >= 4)
-            CheckForFourHit();
-        if (comboIterator >= 3)
-            CheckForThreeHit();
-    }
-
-    private void CheckForThreeHit()
-    {
-        //Debug.Log("Checking for valid 3 hit combo");
-        float timeBetweenThree = (hitTimes[inputIterator] - hitTimes[inputIterator - 2]);
-        if (timeBetweenThree < comboTime) //move has gotten three hits within the proper time
+        Debug.Log("updating combo display, iterator = " + iterator + " current displayed combo = " + currentDisplayedCombo);
+        Destroy(currentlyDisplayedSprite);
+        if (currentDisplayedCombo == 0)
         {
-            //Debug.Log("Three hit time ok");
-            for (int x = 0; x < validComboIntList.Length; x++)
-            {
-                if ((validComboIntList[x].length == 3)
-                    && (validComboIntList[x].move1 == hitInputs[inputIterator - 2])
-                    && (validComboIntList[x].move2 == hitInputs[inputIterator - 1])
-                    && (validComboIntList[x].move3 == hitInputs[inputIterator])) //is valid three hit
-                {
-                    RegisterCombo(validComboIntList[x].moveNum);
-                    comboIterator = 0;
-                    break;
-                }
-            }
+            Debug.Log("Creating Combo 0, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo0SpriteList[iterator], spriteDisplayTransform);
         }
-    }
-    private void CheckForFourHit()
-    {
-        //Debug.Log("Checking for valid 4 hit combo");
-        float timeBetweenFour = (hitTimes[inputIterator] - hitTimes[inputIterator - 3]);
-        if (timeBetweenFour < comboTime) //move has gotten three hits within the proper time
+        else if (currentDisplayedCombo == 1)
         {
-            for (int x = 0; x < validComboIntList.Length; x++)
-            {
-                if ((validComboIntList[x].length == 4)
-                    && (validComboIntList[x].move1 == hitInputs[inputIterator - 3])
-                    && (validComboIntList[x].move2 == hitInputs[inputIterator - 2])
-                    && (validComboIntList[x].move3 == hitInputs[inputIterator - 1])
-                    && (validComboIntList[x].move4 == hitInputs[inputIterator])) //is valid three hit
-                {
-                    RegisterCombo(validComboIntList[x].moveNum);
-                    comboIterator = 0;
-                    break;
-                }
-            }
+            Debug.Log("Creating Combo 1, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo1SpriteList[iterator], spriteDisplayTransform);
         }
-
-    }
-    private void CheckForFiveHit()
-    {
-        //Debug.Log("Checking for valid 5 hit combo");
-        float timeBetweenFive = (hitTimes[inputIterator] - hitTimes[inputIterator - 4]);
-        if (timeBetweenFive < comboTime) //move has gotten three hits within the proper time
+        else if (currentDisplayedCombo == 2)
         {
-            for (int x = 0; x < validComboIntList.Length; x++)
-            {
-                if ((validComboIntList[x].length == 5)
-                    && (validComboIntList[x].move1 == hitInputs[inputIterator - 4])
-                    && (validComboIntList[x].move2 == hitInputs[inputIterator - 3])
-                    && (validComboIntList[x].move3 == hitInputs[inputIterator - 2])
-                    && (validComboIntList[x].move4 == hitInputs[inputIterator - 1])
-                    && (validComboIntList[x].move5 == hitInputs[inputIterator])) //is valid three hit
-                {
-                    RegisterCombo(validComboIntList[x].moveNum);
-                    comboIterator = 0;
-                    break;
-                }
-            }
+            Debug.Log("Creating Combo 2, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo2SpriteList[iterator], spriteDisplayTransform);
         }
-
+        else if (currentDisplayedCombo == 3)
+        {
+            Debug.Log("Creating Combo 3, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo3SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 4)
+        {
+            Debug.Log("Creating Combo 4, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo4SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 5)
+        {
+            Debug.Log("Creating Combo 5, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo5SpriteList[iterator], spriteDisplayTransform);
+        }
     }
 
     private void RegisterCombo(int comboNum)
@@ -584,7 +579,9 @@ public class InputTracker : MonoBehaviour
         Debug.Log("Combo " + comboNum + "  has been performed");
         combosToPlay[maxComboToPlay] = comboNum;
         maxComboToPlay += 1;
+        indicatorManager.ShowCombo();
         AddScore(25); //TEMP
+        DisplayNewCombo();
     }
     private void PrintHitInputArray()
     {
@@ -600,6 +597,7 @@ public class InputTracker : MonoBehaviour
 
     public void BeginHitPlayback()
     {
+        Debug.Log("beggining hit playback");
         playbackHits = true;
         combosPlayed = 0;
         comboInProgress = true; ;
@@ -611,6 +609,7 @@ public class InputTracker : MonoBehaviour
     {
         if (combosPlayed >= maxComboToPlay) //done playing combos
         {
+            Debug.Log("combos played  = " + combosPlayed + ", max combo to play = " + maxComboToPlay + ", done playing combos");
             playbackHits = false;
             allAttacksPlayed = true;
             Array.Clear(combosToPlay, 0, 20);
@@ -623,6 +622,7 @@ public class InputTracker : MonoBehaviour
 
             if (betweenComboTimer <= 0)
             {
+                Debug.Log("start another combo after time delay");
                 //reset individual combo vars (combo being the set of orbs that come out per combo)
                 comboInProgress = true;
                 comboTimer = 0;
@@ -633,9 +633,10 @@ public class InputTracker : MonoBehaviour
         {
             if (currentComboMove >= comboAttacksInt[combosToPlay[combosPlayed]].totalMoves)
             {
+                Debug.Log("current moves total moves are done, increase combos played");
                 comboInProgress = false;
-                combosPlayed += 1;
                 betweenComboTimer = timeBetweenCombos;
+                combosPlayed += 1;
 
             }
             else if (comboAttacksInt[combosToPlay[combosPlayed]].hitTimes[currentComboMove] < comboTimer)
@@ -673,5 +674,18 @@ public class InputTracker : MonoBehaviour
             greenShotInst.GetComponent<Rigidbody>().velocity = new Vector3(speed, 0f, 0f);
             Destroy(greenShotInst, 3f);
         }
+    }
+
+    private void DisplayNewCombo()
+    {
+        currentDisplayedCombo = Random.Range(0, 5);
+        Debug.Log("Current combo = " + currentDisplayedCombo);
+
+        inputIterator = 0;
+
+        //instatiate new images
+        UpdateComboDisplay(inputIterator);
+
+
     }
 }

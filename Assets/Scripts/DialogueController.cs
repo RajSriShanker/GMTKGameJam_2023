@@ -2,9 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using TMPro;
 
 public class DialogueController : MonoBehaviour
 {
+    [SerializeField] private TextMeshPro crowdText;
+
     string[] dialogueArray;
     string crowdFilePath;
     
@@ -21,7 +24,7 @@ public class DialogueController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             dialogueArray = File.ReadAllLines(crowdFilePath);
-            Debug.Log(dialogueArray[Random.Range(0, dialogueArray.Length)]);
+            crowdText.text = dialogueArray[Random.Range(0, dialogueArray.Length)];
         }
     }
 
