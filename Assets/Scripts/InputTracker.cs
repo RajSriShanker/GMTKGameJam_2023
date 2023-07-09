@@ -60,6 +60,17 @@ public enum HitType
     right//6
 }
 
+public struct ComboSprites
+{
+    public GameObject[] combo0Sprites;
+    public GameObject[] combo1Sprites;
+    public GameObject[] combo2Sprites;
+    public GameObject[] combo3Sprites;
+    public GameObject[] combo4Sprites;
+    public GameObject[] combo5Sprites;
+
+}
+
 public class InputTracker : MonoBehaviour
 {
     [SerializeField] private InputActionReference redAction;
@@ -131,6 +142,14 @@ public class InputTracker : MonoBehaviour
     [SerializeField] private ComboAttacksInt[] comboAttacksInt;
     [SerializeField] private IndicatorManager indicatorManager;
     private int currentDisplayedCombo;
+    public GameObject[] combo0SpriteList;
+    public GameObject[] combo1SpriteList;
+    public GameObject[] combo2SpriteList;
+    public GameObject[] combo3SpriteList;
+    public GameObject[] combo4SpriteList;
+    public GameObject[] combo5SpriteList;
+    [SerializeField] private Transform spriteDisplayTransform;
+    private GameObject currentlyDisplayedSprite;
 
 
 
@@ -487,7 +506,6 @@ public class InputTracker : MonoBehaviour
         if (hitInputs[inputIterator] != validComboIntList[currentDisplayedCombo].moves[inputIterator])
         {
             Debug.Log("Combo invalid, spawning new");
-            RemoveCombo();
             DisplayNewCombo();
             
         }
@@ -501,17 +519,48 @@ public class InputTracker : MonoBehaviour
         else
         {
             Debug.Log("Correct input, not done so update display");
-            UpdateComboDisplay(inputIterator);
             inputIterator += 1;
+            UpdateComboDisplay(inputIterator);
         }
         
 
 
     }
 
-    private void UpdateComboDisplay(int orbToUpdate)
+    private void UpdateComboDisplay(int iterator)
     {
-
+        Debug.Log("updating combo display, iterator = " + iterator + " current displayed combo = " + currentDisplayedCombo);
+        Destroy(currentlyDisplayedSprite);
+        if (currentDisplayedCombo == 0)
+        {
+            Debug.Log("Creating Combo 0, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo0SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 1)
+        {
+            Debug.Log("Creating Combo 1, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo1SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 2)
+        {
+            Debug.Log("Creating Combo 2, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo2SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 3)
+        {
+            Debug.Log("Creating Combo 3, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo3SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 4)
+        {
+            Debug.Log("Creating Combo 4, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo4SpriteList[iterator], spriteDisplayTransform);
+        }
+        else if (currentDisplayedCombo == 5)
+        {
+            Debug.Log("Creating Combo 5, move " + iterator);
+            currentlyDisplayedSprite = Instantiate(combo5SpriteList[iterator], spriteDisplayTransform);
+        }
     }
 
     private void RegisterCombo(int comboNum)
@@ -520,7 +569,6 @@ public class InputTracker : MonoBehaviour
         combosToPlay[maxComboToPlay] = comboNum;
         maxComboToPlay += 1;
         AddScore(25); //TEMP
-        RemoveCombo();
         DisplayNewCombo();
     }
     private void PrintHitInputArray()
@@ -624,13 +672,8 @@ public class InputTracker : MonoBehaviour
         inputIterator = 0;
 
         //instatiate new images
+        UpdateComboDisplay(inputIterator);
 
-
-
-    }
-
-    private void RemoveCombo()
-    {
 
     }
 }
