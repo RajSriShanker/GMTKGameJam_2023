@@ -827,7 +827,7 @@ MonoBehaviour:
   crowdSlider: {fileID: 1635056033}
   crowdMaxValue: 100
   comboTime: 3
-  timeBetweenCombos: 0.5
+  timeBetweenCombos: 0.25
   allAttacksPlayed: 0
   validComboList:
   - moveNum: 0
@@ -876,9 +876,9 @@ MonoBehaviour:
   - totalMoves: 3
     hits: 010000000100000001000000
     hitSpeeds:
-    - 10
-    - 10
-    - 10
+    - 6
+    - 6
+    - 6
     hitTimes:
     - 0
     - 0.25
@@ -886,9 +886,9 @@ MonoBehaviour:
   - totalMoves: 3
     hits: 010000000300000001000000
     hitSpeeds:
-    - 10
-    - 10
-    - 10
+    - 6
+    - 6
+    - 6
     hitTimes:
     - 0
     - 0.25
@@ -896,10 +896,10 @@ MonoBehaviour:
   - totalMoves: 4
     hits: 02000000030000000100000001000000
     hitSpeeds:
-    - 10
-    - 10
-    - 10
-    - 10
+    - 6
+    - 6
+    - 6
+    - 6
     hitTimes:
     - 0
     - 0.25
@@ -908,10 +908,10 @@ MonoBehaviour:
   - totalMoves: 4
     hits: 02000000030000000100000003000000
     hitSpeeds:
-    - 10
-    - 10
-    - 10
-    - 10
+    - 6
+    - 6
+    - 6
+    - 6
     hitTimes:
     - 0
     - 0.25
@@ -920,11 +920,11 @@ MonoBehaviour:
   - totalMoves: 5
     hits: 0300000003000000010000000200000001000000
     hitSpeeds:
-    - 10
-    - 10
-    - 10
-    - 10
-    - 10
+    - 6
+    - 6
+    - 6
+    - 6
+    - 6
     hitTimes:
     - 0
     - 0.25
@@ -934,11 +934,11 @@ MonoBehaviour:
   - totalMoves: 3
     hits: 0200000003000000010000000200000001000000
     hitSpeeds:
-    - 10
-    - 10
-    - 10
-    - 10
-    - 10
+    - 6
+    - 6
+    - 6
+    - 6
+    - 6
     hitTimes:
     - 0
     - 0.25
@@ -1000,11 +1000,14 @@ MonoBehaviour:
   timerManager: {fileID: 527062244}
   camManager: {fileID: 1155841243}
   inputTracker: {fileID: 195520306}
-  roundTime: 10
+  roundTime: 15
   preFightTime: 3
   timeDecreasePerRoundPercent: 0.1
+  lowestPossibleRoundTime: 5
   secondRoundBufferTime: 2
   recieverManager: {fileID: 1037236787}
+  crowdSlider: {fileID: 1635056033}
+  healthSlider: {fileID: 1361659990}
 --- !u!1 &201066437
 GameObject:
   m_ObjectHideFlags: 0
@@ -1249,7 +1252,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 281080701}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.49, y: -0.29, z: 10}
+  m_LocalPosition: {x: 6.49, y: -0.29, z: 13.92}
   m_LocalScale: {x: 0.67296, y: 0.67296, z: 0.67296}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3408,7 +3411,7 @@ MonoBehaviour:
   colorChangeTime: 0.05
   playerMaxHealth: 100
   playerHealthSlider: {fileID: 1361659990}
-  healthLostOnHit: 5
+  healthLostOnHit: 10
   indicatorManager: {fileID: 1985631854}
 --- !u!1 &1115491069
 GameObject:
@@ -6019,7 +6022,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2098727988}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.24, y: -0.3499999, z: -0.27999973}
+  m_LocalPosition: {x: -8.33, y: -0.67, z: -0.27999973}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

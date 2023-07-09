@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameStateManager : MonoBehaviour
 {
@@ -22,9 +23,12 @@ public class GameStateManager : MonoBehaviour
     public float roundTime;
     public float preFightTime;
     [SerializeField] private float timeDecreasePerRoundPercent;
+    [SerializeField] private float lowestPossibleRoundTime;
     public float secondRoundBufferTime;
     [SerializeField] private HitReceiverManager recieverManager;
-    
+    [SerializeField] private Slider crowdSlider;
+    [SerializeField] private Slider healthSlider;
+
 
     private void Awake()
     {
@@ -113,7 +117,10 @@ public class GameStateManager : MonoBehaviour
 
         if (timerManager.firstFighterTimerDone)
         {
+            if (crowdSlider.value < 100)
+                EndGame();
             inputTracker.EndTracking();
+
             firstFighterStateRun = false;
             timerManager.firstFighterTimerDone = false;
             return 4;
@@ -151,6 +158,13 @@ public class GameStateManager : MonoBehaviour
             secondFighterStateRun = true;
         }
 
+        if(secondFighterStateRun) //check healt
+        {
+            if (healthSlider.value <=0 )
+                EndGame();
+
+        }
+
         if (inputTracker.allAttacksPlayed)
         {
             timerManager.StartSecondFighterTimer();
@@ -160,6 +174,9 @@ public class GameStateManager : MonoBehaviour
         if (timerManager.secondFighterTimerDone)
         {
             roundTime -= (roundTime * timeDecreasePerRoundPercent);
+            if (roundTime < lowestPossibleRoundTime)
+                roundTime = lowestPossibleRoundTime;
+
             recieverManager.EndTracking();
             secondFighterStateRun = false;
             timerManager.secondFighterTimerDone = false;
@@ -172,5 +189,11 @@ public class GameStateManager : MonoBehaviour
     private void OnMenuStartPressed()
     {
         exitingStartMenu = true;
+    }
+
+    public void EndGame()
+    {
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
     }
 }

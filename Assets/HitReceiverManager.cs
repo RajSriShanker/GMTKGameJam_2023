@@ -57,6 +57,9 @@ public class HitReceiverManager : MonoBehaviour
         redAction.action.started += HitRed;
         blueAction.action.started += HitBlue;
         greenAction.action.started += HitGreen;
+        redAction.action.canceled += LetGoRed;
+        blueAction.action.canceled += LetGoBlue;
+        greenAction.action.canceled += LetGoGreen;
 
     }
 
@@ -70,69 +73,103 @@ public class HitReceiverManager : MonoBehaviour
 
     private void HitRed(InputAction.CallbackContext context)
     {
-        if (trackInputs)
-        {
-            redHitDetected = true;
-            redTargetMesh.material.color = Color.grey;
-            redColorTimer = colorChangeTime;
-        }
-
+        StartRed();
+        EndBlue();
+        EndGreen();
     }
 
     private void HitBlue(InputAction.CallbackContext context)
     {
-        if (trackInputs)
-        {
-            blueHitDetected = true;
-            blueTargetMesh.material.color = Color.grey;
-            blueColorTimer = colorChangeTime;
-        }
+        StartBlue();
+        EndRed();
+        EndGreen();
 
     }
 
     private void HitGreen(InputAction.CallbackContext context)
     {
+        StartGreen();
+        EndBlue();
+        EndRed();
+    }
+
+    private void LetGoGreen(InputAction.CallbackContext context)
+    {
+        EndGreen();
+    }
+
+    private void LetGoRed(InputAction.CallbackContext context)
+    {
+        EndRed();
+    }
+
+    private void LetGoBlue(InputAction.CallbackContext context)
+    {
+        EndBlue();
+    }
+
+
+    private void StartRed()
+    {
+        if (trackInputs)
+        {
+            redHitDetected = true;
+            redTargetMesh.material.color = Color.grey;
+        }
+
+    }
+
+    private void StartBlue()
+    {
+        if (trackInputs)
+        {
+            blueHitDetected = true;
+            blueTargetMesh.material.color = Color.grey;
+        }
+
+    }
+
+    private void StartGreen()
+    {
         if (trackInputs)
         {
             greenHitDetected = true;
             greenTargetMesh.material.color = Color.grey;
-            greenColorTimer = colorChangeTime;
         }
+
     }
 
-    private void CheckColorTimers()
+    private void EndRed()
     {
-        if (redColorTimer > 0)
+        if (trackInputs)
         {
-            redColorTimer -= Time.deltaTime;
-            if (redColorTimer <= 0)
-            {
-                redTargetMesh.material.color = Color.red;
-            }
+            redHitDetected = false;
+            redTargetMesh.material.color = Color.red;
         }
 
-        if (greenColorTimer > 0)
+    }
+
+    private void EndBlue()
+    {
+        if (trackInputs)
         {
-            greenColorTimer -= Time.deltaTime;
-            if (greenColorTimer <= 0)
-            {
-                greenTargetMesh.material.color = Color.green;
-            }
+            blueHitDetected = false;
+            blueTargetMesh.material.color = Color.blue;
         }
 
-        if (blueColorTimer > 0)
+    }
+    private void EndGreen()
+    {
+        if (trackInputs)
         {
-            blueColorTimer -= Time.deltaTime;
-            if (blueColorTimer <= 0)
-            {
-                blueTargetMesh.material.color = Color.blue;
-            }
+            greenHitDetected = false;
+            greenTargetMesh.material.color = Color.green;
         }
+
     }
 
     private void Update()
     {
-        CheckColorTimers();
         CheckReceivers();
     }
 
@@ -155,7 +192,6 @@ public class HitReceiverManager : MonoBehaviour
                 Destroy(redTarget.currentlySelectedHit);
                 indicatorManager.ShowDodge();
             }
-            redHitDetected = false;
         }
 
 
@@ -166,7 +202,6 @@ public class HitReceiverManager : MonoBehaviour
                 Destroy(blueTarget.currentlySelectedHit);
                 indicatorManager.ShowDodge();
             }
-            blueHitDetected = false;
         }
 
 
@@ -177,7 +212,6 @@ public class HitReceiverManager : MonoBehaviour
                 Destroy(greenTarget.currentlySelectedHit);
                 indicatorManager.ShowDodge();
             }
-            greenHitDetected = false;
         }
 
         if (playerTarget.currentlySelectedHit != null)
