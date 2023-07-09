@@ -36,6 +36,14 @@ public class HitReceiverManager : MonoBehaviour
     [SerializeField] private Slider playerHealthSlider;
     [SerializeField] private float healthLostOnHit;
     [SerializeField] private IndicatorManager indicatorManager;
+    [SerializeField] private SpriteRenderer redMesh;
+    [SerializeField] private SpriteRenderer greenMesh;
+    [SerializeField] private SpriteRenderer blueMesh;
+    [SerializeField] private Color redColor;
+    [SerializeField] private Color greenColor;
+    [SerializeField] private Color blueColor;
+    [SerializeField] private Color greyColor;
+    [SerializeField] private CameraShakeController shakeController;
 
     private void Awake()
     {
@@ -49,6 +57,10 @@ public class HitReceiverManager : MonoBehaviour
 
         playerHealthSlider.maxValue = playerMaxHealth;
         playerHealth = playerMaxHealth;
+
+        redMesh.color = redColor;
+        greenMesh.color = greenColor;
+        blueMesh.color = blueColor;
     }
 
     private void OnEnable()
@@ -114,7 +126,7 @@ public class HitReceiverManager : MonoBehaviour
         if (trackInputs)
         {
             redHitDetected = true;
-            redTargetMesh.material.color = Color.grey;
+            redMesh.color = greyColor;
         }
 
     }
@@ -124,7 +136,7 @@ public class HitReceiverManager : MonoBehaviour
         if (trackInputs)
         {
             blueHitDetected = true;
-            blueTargetMesh.material.color = Color.grey;
+            blueMesh.color = greyColor;
         }
 
     }
@@ -134,7 +146,7 @@ public class HitReceiverManager : MonoBehaviour
         if (trackInputs)
         {
             greenHitDetected = true;
-            greenTargetMesh.material.color = Color.grey;
+            greenMesh.color = greyColor;
         }
 
     }
@@ -144,7 +156,7 @@ public class HitReceiverManager : MonoBehaviour
         if (trackInputs)
         {
             redHitDetected = false;
-            redTargetMesh.material.color = Color.red;
+            redMesh.color = redColor;
         }
 
     }
@@ -154,7 +166,7 @@ public class HitReceiverManager : MonoBehaviour
         if (trackInputs)
         {
             blueHitDetected = false;
-            blueTargetMesh.material.color = Color.blue;
+            blueMesh.color = blueColor;
         }
 
     }
@@ -163,7 +175,7 @@ public class HitReceiverManager : MonoBehaviour
         if (trackInputs)
         {
             greenHitDetected = false;
-            greenTargetMesh.material.color = Color.green;
+            greenMesh.color = greenColor;
         }
 
     }
@@ -220,6 +232,7 @@ public class HitReceiverManager : MonoBehaviour
             playerHealth -= healthLostOnHit;
             playerHealthSlider.value = playerHealth;
             indicatorManager.ShowHit();
+            shakeController.OnShake(0.1f, 0.2f);
         }
     }
 

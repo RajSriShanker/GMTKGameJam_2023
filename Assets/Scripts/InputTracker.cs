@@ -102,6 +102,14 @@ public class InputTracker : MonoBehaviour
     [SerializeField] private GameObject greenIndicator;
     [SerializeField] private GameObject blueIndicator;
 
+    [SerializeField] private SpriteRenderer redSprite;
+    [SerializeField] private SpriteRenderer greenSprite;
+    [SerializeField] private SpriteRenderer blueSprite;
+    [SerializeField] private Color redColor;
+    [SerializeField] private Color greenColor;
+    [SerializeField] private Color blueColor;
+    [SerializeField] private Color greyColor;
+
     private MeshRenderer redIndicatorMesh;
     private MeshRenderer greenIndicatorMesh;
     private MeshRenderer blueIndicatorMesh;
@@ -150,17 +158,15 @@ public class InputTracker : MonoBehaviour
     public GameObject[] combo5SpriteList;
     [SerializeField] private Transform spriteDisplayTransform;
     private GameObject currentlyDisplayedSprite;
+    [SerializeField] private CameraShakeController shakeController;
 
 
 
     private void Awake()
     {
-        redIndicatorMesh = redIndicator.GetComponent<MeshRenderer>();
-        greenIndicatorMesh = greenIndicator.GetComponent<MeshRenderer>();
-        blueIndicatorMesh = blueIndicator.GetComponent<MeshRenderer>();
-        redIndicatorMesh.material.color = Color.red;
-        greenIndicatorMesh.material.color = Color.green;
-        blueIndicatorMesh.material.color = Color.blue;
+        redSprite.color = redColor;
+        greenSprite.color = greenColor;
+        blueSprite.color = blueColor;
         inputTrackingTime = stateManager.roundTime;
         crowdSlider.maxValue = crowdMaxValue;
         crowdSlider.minValue = 0;
@@ -342,7 +348,7 @@ public class InputTracker : MonoBehaviour
         if (trackInputs)
         {
             redHitDetected = true;
-            redIndicatorMesh.material.color = Color.grey;
+            redSprite.color = greyColor;
             redColorTimer = colorChangeTime;
         }
 
@@ -358,7 +364,7 @@ public class InputTracker : MonoBehaviour
         if (trackInputs)
         {
             blueHitDetected = true;
-            blueIndicatorMesh.material.color = Color.grey;
+            blueSprite.color = greyColor;
             blueColorTimer = colorChangeTime;
         }
 
@@ -374,7 +380,7 @@ public class InputTracker : MonoBehaviour
         if (trackInputs)
         {
             greenHitDetected = true;
-            greenIndicatorMesh.material.color = Color.grey;
+            greenSprite.color = greyColor;
             greenColorTimer = colorChangeTime;
         }
     }
@@ -452,7 +458,7 @@ public class InputTracker : MonoBehaviour
             redColorTimer -= Time.deltaTime;
             if (redColorTimer <= 0)
             {
-                redIndicatorMesh.material.color = Color.red;
+                redSprite.color = redColor;
             }
         }
 
@@ -461,7 +467,7 @@ public class InputTracker : MonoBehaviour
             greenColorTimer -= Time.deltaTime;
             if (greenColorTimer <= 0)
             {
-                greenIndicatorMesh.material.color = Color.green;
+                greenSprite.color = greenColor;
             }
         }
 
@@ -470,7 +476,7 @@ public class InputTracker : MonoBehaviour
             blueColorTimer -= Time.deltaTime;
             if (blueColorTimer <= 0)
             {
-                blueIndicatorMesh.material.color = Color.blue;
+                blueSprite.color = blueColor;
             }
         }
     }
@@ -506,6 +512,7 @@ public class InputTracker : MonoBehaviour
         if (hitInputs[inputIterator] != validComboIntList[currentDisplayedCombo].moves[inputIterator])
         {
             Debug.Log("Combo invalid, spawning new");
+            shakeController.OnShake(0.1f, 0.2f);
             indicatorManager.ShowComboFail();
             DisplayNewCombo();
             
