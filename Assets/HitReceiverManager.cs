@@ -44,6 +44,7 @@ public class HitReceiverManager : MonoBehaviour
     [SerializeField] private Color blueColor;
     [SerializeField] private Color greyColor;
     [SerializeField] private CameraShakeController shakeController;
+    [SerializeField] private CharacterAnimator animator;
 
     private void Awake()
     {
@@ -203,6 +204,8 @@ public class HitReceiverManager : MonoBehaviour
             {
                 Destroy(redTarget.currentlySelectedHit);
                 indicatorManager.ShowDodge();
+                animator.StartMidAttack();
+                animator.StartMidDodge();
             }
         }
 
@@ -213,6 +216,8 @@ public class HitReceiverManager : MonoBehaviour
             {
                 Destroy(blueTarget.currentlySelectedHit);
                 indicatorManager.ShowDodge();
+                animator.StartLowAttack();
+                animator.StartLowDodge();
             }
         }
 
@@ -223,6 +228,8 @@ public class HitReceiverManager : MonoBehaviour
             {
                 Destroy(greenTarget.currentlySelectedHit);
                 indicatorManager.ShowDodge();
+                animator.StartHighAttack();
+                animator.StartHighDodge();
             }
         }
 

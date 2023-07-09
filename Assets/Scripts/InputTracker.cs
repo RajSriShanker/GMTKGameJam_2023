@@ -159,6 +159,7 @@ public class InputTracker : MonoBehaviour
     [SerializeField] private Transform spriteDisplayTransform;
     private GameObject currentlyDisplayedSprite;
     [SerializeField] private CameraShakeController shakeController;
+    [SerializeField] private CharacterAnimator animator;
 
 
 
@@ -350,6 +351,7 @@ public class InputTracker : MonoBehaviour
             redHitDetected = true;
             redSprite.color = greyColor;
             redColorTimer = colorChangeTime;
+            animator.StartMidAttack();
         }
 
     }
@@ -366,6 +368,8 @@ public class InputTracker : MonoBehaviour
             blueHitDetected = true;
             blueSprite.color = greyColor;
             blueColorTimer = colorChangeTime;
+            animator.StartLowAttack();
+
         }
 
     }
@@ -382,6 +386,7 @@ public class InputTracker : MonoBehaviour
             greenHitDetected = true;
             greenSprite.color = greyColor;
             greenColorTimer = colorChangeTime;
+            animator.StartHighAttack();
         }
     }
 
