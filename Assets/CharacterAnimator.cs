@@ -11,6 +11,7 @@ public class CharacterAnimator : MonoBehaviour
     [SerializeField] private GameObject MidDodge;
     [SerializeField] private GameObject HighDodge;
     [SerializeField] private GameObject LowDodge;
+    [SerializeField] private GameObject IdleDodge;
 
     [SerializeField] private float attackAnimationTime;
     private float attackAnimationTimer; 
@@ -21,7 +22,7 @@ public class CharacterAnimator : MonoBehaviour
     private void Awake()
     {
         ActivateIdleAttack();
-        ActivateMidDodge();
+        ActivateIdleDodge();
     }
 
     private void Update()
@@ -41,7 +42,7 @@ public class CharacterAnimator : MonoBehaviour
             dodgeAnimationTimer -= Time.deltaTime;
             if (dodgeAnimationTimer <= 0)
             {
-                ActivateMidDodge();
+                ActivateIdleDodge();
             }
         }
 
@@ -134,18 +135,29 @@ public class CharacterAnimator : MonoBehaviour
         MidDodge.SetActive(true);
         HighDodge.SetActive(false);
         LowDodge.SetActive(false);
+        IdleDodge.SetActive(false);
     }
     private void ActivateHighDodge()
     {
         MidDodge.SetActive(false);
         HighDodge.SetActive(true);
         LowDodge.SetActive(false);
+        IdleDodge.SetActive(false);
     }
     private void ActivateLowDodge()
     {
         MidDodge.SetActive(false);
         HighDodge.SetActive(false);
         LowDodge.SetActive(true);
+        IdleDodge.SetActive(false);
+    }
+
+    private void ActivateIdleDodge()
+    {
+        IdleDodge.SetActive(true);
+        MidDodge.SetActive(false);
+        HighDodge.SetActive(false);
+        LowDodge.SetActive(false);
     }
 
 

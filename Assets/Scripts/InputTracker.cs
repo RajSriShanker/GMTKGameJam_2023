@@ -543,6 +543,8 @@ public class InputTracker : MonoBehaviour
             //Debug.Log("Combo invalid, spawning new");
             shakeController.OnShake(0.1f, 0.2f);
             indicatorManager.ShowComboFail();
+            if (!(crowdSlider.value >= 100))
+                AddScore(-5);
             CheckForBooReady();
             DisplayNewCombo();
             
