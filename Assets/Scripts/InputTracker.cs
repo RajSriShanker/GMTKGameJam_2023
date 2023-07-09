@@ -506,6 +506,7 @@ public class InputTracker : MonoBehaviour
         if (hitInputs[inputIterator] != validComboIntList[currentDisplayedCombo].moves[inputIterator])
         {
             Debug.Log("Combo invalid, spawning new");
+            indicatorManager.ShowComboFail();
             DisplayNewCombo();
             
         }
@@ -568,6 +569,7 @@ public class InputTracker : MonoBehaviour
         Debug.Log("Combo " + comboNum + "  has been performed");
         combosToPlay[maxComboToPlay] = comboNum;
         maxComboToPlay += 1;
+        indicatorManager.ShowCombo();
         AddScore(25); //TEMP
         DisplayNewCombo();
     }
