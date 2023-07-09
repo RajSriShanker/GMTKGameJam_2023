@@ -24,6 +24,8 @@ public class UIController : MonoBehaviour
     {
         startButton.onClick.AddListener(StartGame);
         informationButton.onClick.AddListener(InformationDisplay);
+
+
     }
 
     // Update is called once per frame
@@ -39,8 +41,10 @@ public class UIController : MonoBehaviour
     {
         if (informationUI.transform.localPosition.x == infoButtonStartPos)
         {
+
             informationUI.transform.DOLocalMoveX(infoButtonEndPos, moveSpeed);
             gameTitle.transform.DOLocalMoveX(infoButtonStartPos, moveSpeed);
+            
         }
         else
         {
@@ -55,5 +59,7 @@ public class UIController : MonoBehaviour
         menuBackgroundImage.transform.DOLocalMoveX(infoButtonStartPos, moveSpeed);
         startButton.gameObject.transform.DOLocalMoveX(infoButtonStartPos, moveSpeed);
         informationButton.gameObject.transform.DOLocalMoveX(infoButtonStartPos, moveSpeed);
+        FMODUnity.RuntimeManager.PlayOneShot("event:/StartUI");
+
     }
 }
