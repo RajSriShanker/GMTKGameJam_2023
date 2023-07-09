@@ -8,6 +8,8 @@ using TMPro;
 public class UIController : MonoBehaviour
 {
     public float moveSpeed = 1;
+    public float rotationSpeed = 1;
+    public Image centerImage;
     public Image menuBackgroundImage;
     public GameObject gameTitle;
     public Button startButton;
@@ -27,6 +29,9 @@ public class UIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Rotate centerimage infinite using DoTween using rotationSpeed
+        centerImage.transform.DORotate(new Vector3(0, 0, 360), rotationSpeed, RotateMode.FastBeyond360).SetLoops(-1,LoopType.Restart);
+        
         
     }
 

@@ -561,17 +561,6 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "021cc759-d1ac-4c28-b3b4-8b9030935176",
-                    "path": "<Keyboard>/a",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Red Button",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "91b7dbbe-b450-4b1d-855f-9c0eff56898d",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",
@@ -594,17 +583,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f57fa1ec-c59f-4762-a027-e37544197f58",
-                    "path": "<Keyboard>/d",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Red Button",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "00d6d6c4-a007-469e-9a56-7820fdf56f2e",
                     "path": "<Keyboard>/s",
                     "interactions": "",
@@ -616,12 +594,12 @@
                 },
                 {
                     "name": "",
-                    "id": "a75ffef2-8df0-4ebc-a852-a93dfeab6f55",
-                    "path": "<Keyboard>/q",
+                    "id": "c655a4ce-a714-40b7-bfe6-a82b730adbef",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Green Button",
+                    "groups": "",
+                    "action": "Red Button",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -649,8 +627,8 @@
                 },
                 {
                     "name": "",
-                    "id": "ba1d6415-2519-4acc-99dc-aabe6944eec9",
-                    "path": "<Keyboard>/w",
+                    "id": "5d9e455b-a6a8-4404-a574-62478eb6107d",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -660,8 +638,8 @@
                 },
                 {
                     "name": "",
-                    "id": "9a744662-20db-4159-97ed-1bac9dcc38d5",
-                    "path": "<Keyboard>/e",
+                    "id": "9e256a52-624e-44de-8755-78ef2b0b8bd8",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -693,8 +671,8 @@
                 },
                 {
                     "name": "",
-                    "id": "ed70d10c-b508-4577-bdbf-a6a4d627b966",
-                    "path": "<Keyboard>/z",
+                    "id": "50495b83-ba06-4855-9a0a-d35381e7165e",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -704,19 +682,8 @@
                 },
                 {
                     "name": "",
-                    "id": "4086bcd5-9663-42db-b6af-937821741ae5",
-                    "path": "<Keyboard>/x",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Blue Button",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "ebefe2fa-2485-4ea7-80ec-3e2215a45a08",
-                    "path": "<Keyboard>/c",
+                    "id": "17600bc5-c97b-4f2f-a7ce-63fcd96af9b3",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
