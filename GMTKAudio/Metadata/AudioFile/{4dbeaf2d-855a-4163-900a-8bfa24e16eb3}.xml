@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{4dbeaf2d-855a-4163-900a-8bfa24e16eb3}">
+		<property name="assetPath">
+			<value>PunchFaceHard_SFXB.2407.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.58666666666666667</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{4985e98c-0ca7-43d3-b62f-8e32e03ba296}</destination>
+		</relationship>
+	</object>
+</objects>

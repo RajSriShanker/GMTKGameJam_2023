@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{7b772ae8-2bff-4851-bc47-d77261fb7d1b}">
+		<property name="assetPath">
+			<value>ESM_Subtle_Jump_Airy_Whoosh_Pass_By.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.17369614512471657</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{4985e98c-0ca7-43d3-b62f-8e32e03ba296}</destination>
+		</relationship>
+	</object>
+</objects>

@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using System;
-using DG.Tweening;
 using UnityEngine.UI;
 
 [System.Serializable]
@@ -146,11 +143,15 @@ public class InputTracker : MonoBehaviour
         crowdSlider.minValue = 0;
         comboIterator = 0;
         validComboIntList = new ComboInt[30];
+        FMODUnity.RuntimeManager.PlayOneShot("event:/Combo/Combo1");
         comboAttacksInt = new ComboAttacksInt[30];
         CreateComboTable();
         combosToPlay = new int[20];
 
     }
+
+
+
 
     private void CreateComboTable()
     {
@@ -162,7 +163,7 @@ public class InputTracker : MonoBehaviour
         }
 
         z = 0;
-        foreach(ComboAttacks attack in comboAttacks)
+        foreach (ComboAttacks attack in comboAttacks)
         {
             comboAttacksInt[z] = TranslateAttackList(attack);
             z++;
@@ -177,6 +178,7 @@ public class InputTracker : MonoBehaviour
         attacksToReturn.hitTimes = attacks.hitTimes;
         attacksToReturn.totalMoves = attacks.totalMoves;
         attacksToReturn.hits = new int[attacks.hits.Length];
+        
 
         for (int u = 0; u < attacks.hits.Length; u++)
         {
@@ -234,6 +236,7 @@ public class InputTracker : MonoBehaviour
             comboToReturn.move2 = 5;
         else if (combo.move2 == HitType.right)
             comboToReturn.move2 = 6;
+
         else comboToReturn.move2 = 0;
 
 
@@ -322,6 +325,7 @@ public class InputTracker : MonoBehaviour
             redHitDetected = true;
             redIndicatorMesh.material.color = Color.grey;
             redColorTimer = colorChangeTime;
+            FMODUnity.RuntimeManager.PlayOneShot("event:/High Punch", GetComponent<Transform>().position);
         }
 
     }
@@ -354,6 +358,7 @@ public class InputTracker : MonoBehaviour
             greenHitDetected = true;
             greenIndicatorMesh.material.color = Color.grey;
             greenColorTimer = colorChangeTime;
+            FMODUnity.RuntimeManager.PlayOneShot("event:/Punch2", GetComponent<Transform>().position);
         }
     }
 
@@ -366,8 +371,8 @@ public class InputTracker : MonoBehaviour
     {
 
         Debug.Log("adding score");
-        crowdSlider.value = crowdSlider.value +  scoreToAdd;;
-    
+        crowdSlider.value = crowdSlider.value + scoreToAdd; ;
+
     }
 
 
@@ -503,7 +508,7 @@ public class InputTracker : MonoBehaviour
             CheckForFiveHit();
         if (comboIterator >= 4)
             CheckForFourHit();
-        if (comboIterator >= 3) 
+        if (comboIterator >= 3)
             CheckForThreeHit();
     }
 
@@ -516,7 +521,7 @@ public class InputTracker : MonoBehaviour
             //Debug.Log("Three hit time ok");
             for (int x = 0; x < validComboIntList.Length; x++)
             {
-                if ((validComboIntList[x].length ==3)
+                if ((validComboIntList[x].length == 3)
                     && (validComboIntList[x].move1 == hitInputs[inputIterator - 2])
                     && (validComboIntList[x].move2 == hitInputs[inputIterator - 1])
                     && (validComboIntList[x].move3 == hitInputs[inputIterator])) //is valid three hit
@@ -583,13 +588,13 @@ public class InputTracker : MonoBehaviour
     }
     private void PrintHitInputArray()
     {
-        for(int a = 0; a < 2000 ; a++)
+        for (int a = 0; a < 2000; a++)
         {
             if (hitInputs[a] != 0)
                 //Debug.Log("Hit input " + a + " = " + hitInputs[a] + " Hit Found at time " + hitTimes[a]);
 
-            if (hitInputs[a] == -1)
-                break;
+                if (hitInputs[a] == -1)
+                    break;
         }
     }
 
