@@ -215,6 +215,7 @@ public class HitReceiverManager : MonoBehaviour
             {
                 Destroy(redTarget.currentlySelectedHit);
                 soundPlayer.PlayDodge();
+                soundPlayer.PlayRedShot();
                 indicatorManager.ShowDodge();
                 animator.StartMidAttack();
                 animator.StartMidDodge();
@@ -229,6 +230,7 @@ public class HitReceiverManager : MonoBehaviour
             {
                 Destroy(blueTarget.currentlySelectedHit);
                 soundPlayer.PlayDodge();
+                soundPlayer.PlayBlueShot();
                 indicatorManager.ShowDodge();
                 animator.StartLowAttack();
                 animator.StartLowDodge();
@@ -243,6 +245,7 @@ public class HitReceiverManager : MonoBehaviour
             {
                 Destroy(greenTarget.currentlySelectedHit);
                 soundPlayer.PlayDodge();
+                soundPlayer.PlayGreenShot();
                 indicatorManager.ShowDodge();
                 animator.StartHighAttack();
                 animator.StartHighDodge();
